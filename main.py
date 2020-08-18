@@ -21,7 +21,7 @@ def extract_totals(donos_info):
 
 def add_to_csv(dono_total, donor_count):
     file = open('sgdq2020.csv','a')
-    file.write(f"{datetime.now()},{dono_total},{donor_count}")
+    file.write(f"\n{datetime.now()},{dono_total},{donor_count}")
     file.close()
 
 if __name__ == "__main__":
