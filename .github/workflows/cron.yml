@@ -1,0 +1,22 @@
+name: GDQ Website Scraper
+
+on:
+  schedule:
+    - cron:  '*/5 * * * *'
+
+jobs:
+  python_scraper:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Get current time
+      uses: gerred/actions/current-time@master
+      id: current-time
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: '3.x'
+    - name: main.py
+      run: python3 main.py
+    - run: git add .
+    - run: git commit -m "${{ steps.current-time.outputs.time }} | Data update"
