@@ -1,57 +1,105 @@
 <html>
-    <head>
-        <title>Testing</title>
-        <style>
-            #wrapper {
-  height: 1000px;
-}
-        </style>
-    </head>
-    <body>
-        <div id="wrapper">
-            <canvas id="chart"></canvas>
-        </div>
-    </body>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
-    <script>
-        function makeChart(players) {
-  // players is an array of objects where each object is something like:
+<head>
+  <title>Testing</title>
+  <style>
+  .wrapper {
+    height: 1000px;
+  }
+  </style>
+</head>
+<body>
+
+<div class="wrapper"><canvas id="chart1"></canvas></div>
+<div class="wrapper"><canvas id="chart2"></canvas></div>
+<div class="wrapper"><canvas id="chart3"></canvas></div>
+<div class="wrapper"><canvas id="chart4"></canvas></div>
+
+</body>
+
+<script src="node_modules/d3/dist/d3.min.js"></script>
+<script src="node_modules/chart.js/dist/Chart.bundle.min.js"></script>
+<script>
+function makeCharts(entries) {
+  // entries is an array of objects where each object is something like:
   // {
-  //   "Name": "Steffi Graf",
-  //   "Weeks": "377",
-  //   "Gender": "Female"
+  //   "utcTime": "2020-08-19 03:40:16.011043",
+  //   "donationTotal": "377",
+  //   "donationCount": "376053.48",
+  //   "maxDonation": "10000.00",
+  //   "averageDonation": "51.46",
   // }
-
-  var playerLabels = players.map(function(d) {
-    return d.Name;
+  var utcTimeData = entries.map(function(entry) {
+    var date = new Date(entry.utcTime);
+    date.setHours(date.getHours() - 4);
+    return date
   });
-  var weeksData = players.map(function(d) {
-    return +d.Weeks;
-  });
+  var timeOptions = {
+    scales: {
+      xAxes: [{
+        type: 'time',
+        time: {
+          unit: 'day'
+        }
+      }]
+    }
+  };
 
-  var chart = new Chart('chart', {
-    type: "horizontalBar",
-    options: {
-      maintainAspectRatio: false,
-      legend: {
-        display: false
-      }
-    },
+  var chart1 = new Chart('chart1', {
+    type: 'line',
     data: {
-      labels: playerLabels,
+      labels: utcTimeData,
       datasets: [
         {
-          data: weeksData
+          label: "Donation Total",
+          data: entries.map(function(entry) { return +entry.donationTotal; })
         }
       ]
-    }
+    },
+    options: timeOptions
+  });
+  var chart2 = new Chart('chart2', {
+    type: 'line',
+    data: {
+      labels: utcTimeData,
+      datasets: [
+        {
+          label: "Donation Count",
+          data: entries.map(function(entry) { return +entry.donationCount; })
+        }
+      ]
+    },
+    options: timeOptions
+  });
+  var chart3 = new Chart('chart3', {
+    type: 'line',
+    data: {
+      labels: utcTimeData,
+      datasets: [
+        {
+          label: "Max Donation",
+          data: entries.map(function(entry) { return +entry.maxDonation; })
+        }
+      ]
+    },
+    options: timeOptions
+  });
+  var chart4 = new Chart('chart4', {
+    type: 'line',
+    data: {
+      labels: utcTimeData,
+      datasets: [
+      {
+          label: "Average",
+          data: entries.map(function(entry) { return +entry.averageDonation; })
+        }
+      ]
+    },
+    options: timeOptions
   });
 }
 
 // Request data using D3
-d3
-  .csv("https://s3-us-west-2.amazonaws.com/s.cdpn.io/2814973/atp_wta.csv")
-  .then(makeChart);
-    </script>
+d3.csv("https://raw.githubusercontent.com/Pepper-Wood/gdqGraph/master/sgdq2020.csv").then(makeCharts);
+</script>
+
 </html>
