@@ -1,24 +1,76 @@
 <html>
 <head>
-  <title>Testing</title>
+  <title>SGDQ 2020 Donation Tracker Graphs</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
   <style>
-  .wrapper {
-    height: 1000px;
+  .hero.is-info {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000000;
+  }
+  .hero::before {
+    content: "";
+    background: url('sgdq2020banner.jpeg');
+    background-size: cover;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    opacity: 0.5;
   }
   </style>
 </head>
 <body>
 
-<div class="wrapper"><canvas id="chart1"></canvas></div>
-<div class="wrapper"><canvas id="chart2"></canvas></div>
-<div class="wrapper"><canvas id="chart3"></canvas></div>
-<div class="wrapper"><canvas id="chart4"></canvas></div>
+<section class="hero is-info">
+  <div class="hero-body">
+    <div class="container has-text-centered">
+      <h1 class="title">SGDQ 2020 Donation Tracker Graphs</h1>
+    </div>
+  </div>
+  <div class="hero-foot">
+    <nav class="tabs is-boxed is-fullwidth is-large">
+      <div class="container">
+        <ul>
+          <li class="tab is-active" onclick="openTab(event,'chart1tab')"><a>Donation Total</a></li>
+          <li class="tab" onclick="openTab(event,'chart2tab')"><a>Donation Count</a></li>
+          <li class="tab" onclick="openTab(event,'chart3tab')"><a>Max Donation</a></li>
+          <li class="tab" onclick="openTab(event,'chart4tab')"><a>Donation Total</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+</section>
+  
+<div class="container section">
+  <div id="chart1tab" class="content-tab"><div class="wrapper"><canvas id="chart1"></canvas></div></div>
+  <div id="chart2tab" class="content-tab" style="display:none"><div class="wrapper"><canvas id="chart2"></canvas></div></div>
+  <div id="chart3tab" class="content-tab" style="display:none"><div class="wrapper"><canvas id="chart3"></canvas></div></div>
+  <div id="chart4tab" class="content-tab" style="display:none"><div class="wrapper"><canvas id="chart4"></canvas></div></div>
+</div>
 
 </body>
 
 <script src="https://d3js.org/d3.v5.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
 <script>
+function openTab(evt, tabName) {
+  var i, x, tablinks;
+  x = document.getElementsByClassName("content-tab");
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tab");
+  for (i = 0; i < x.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" is-active", "");
+  }
+  document.getElementById(tabName).style.display = "block";
+  evt.currentTarget.className += " is-active";
+}
+
 function makeCharts(entries) {
   // entries is an array of objects where each object is something like:
   // {
@@ -89,7 +141,7 @@ function makeCharts(entries) {
       labels: utcTimeData,
       datasets: [
       {
-          label: "Average",
+          label: "Average Donation",
           data: entries.map(function(entry) { return +entry.averageDonation; })
         }
       ]
