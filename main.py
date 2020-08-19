@@ -13,18 +13,26 @@ def get_donos_info_from_soup():
 
 def extract_totals(donos_info):
     # ['<small>', ' Donation Total:', '$323,971.50 (6338) —', 'Max/Avg Donation:', '$10,000.00/$51.12', '</small>', '']
-    donos_str = donos_info[2]
+    donation_total = donos_info[2]
     # $323,971.50 (6338) —
-    donos_str = donos_str.replace("$", "").replace(") —", "").replace(",", "").split(" (")
+    donation_total = donation_total.replace("$", "").replace(") —", "").replace(",", "").split(" (")
     # ['323971.50',' 6338']
-    return float(donos_str[0]), float(donos_str[1])
 
-def add_to_csv(dono_total, donor_count):
+    max_avg_donation = donos_info[4]
+    # $10,000.00/$51.12
+    max_avg_donation = max_avg_donation.replace("$", "").replace(",", "")
+    # 10000.00/51.12
+    max_avg_donation = max_avg_donation.split("/")
+
+    totals = ",".join(donation_total) + "," + ",".join(max_avg_donation)
+    return totals
+
+def add_to_csv(totals_str):
     file = open('sgdq2020.csv','a')
-    file.write(f"\n{datetime.now()},{dono_total},{donor_count}")
+    file.write(f"\n{datetime.now()},{totals_str}")
     file.close()
 
 if __name__ == "__main__":
     donos_info = get_donos_info_from_soup()
-    dono_total, donor_count = extract_totals(donos_info)
-    add_to_csv(dono_total, donor_count)
+    totals_str = extract_totals(donos_info)
+    add_to_csv(totals_str)
