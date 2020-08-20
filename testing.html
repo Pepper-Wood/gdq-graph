@@ -36,6 +36,7 @@
       <div class="container">
         <ul>
           <li class="tab is-active" onclick="openTab(event,'chart1tab')"><a>Donation Amount</a></li>
+          <li class="tab" onclick="openTab(event,'chart2tab')"><a>Cumulative Donation Amount</a></li>
         </ul>
       </div>
     </nav>
@@ -44,6 +45,7 @@
   
 <div class="container section">
   <div id="chart1tab" class="content-tab"><div class="wrapper"><canvas id="chart1"></canvas></div></div>
+  <div id="chart2tab" class="content-tab" style="display:none"><div class="wrapper"><canvas id="chart2"></canvas></div></div>
 </div>
 
 </body>
@@ -51,6 +53,17 @@
 <script src="https://d3js.org/d3.v5.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
 <script>
+// https://gist.github.com/vankasteelj/74ab7793133f4b257ea3
+function sec2time(timeInSeconds) {
+  var pad = function(num, size) { return ('000' + num).slice(size * -1); },
+  time = parseFloat(timeInSeconds).toFixed(3),
+  hours = Math.floor(time / 60 / 60),
+  minutes = Math.floor(time / 60) % 60,
+  seconds = Math.floor(time - minutes * 60);
+
+  return pad(hours, 2) + ':' + pad(minutes, 2) + ':' + pad(seconds, 2);
+}
+
 function openTab(evt, tabName) {
   var i, x, tablinks;
   x = document.getElementsByClassName("content-tab");
@@ -65,59 +78,93 @@ function openTab(evt, tabName) {
   evt.currentTarget.className += " is-active";
 }
 
+const cumulativeSum = (sum => value => sum += value)(0);
+
 function makeCharts(entries) {
   // entries is an array of objects where each object is something like:
   // {
-  //   "pageNum": "1",
-  //   "donorName": "ReapzPwnz",
-  //   "timeReceived": "2020-01-15T20:20:20.499826-05:00",
-  //   "amount": "$30.00",
-  //   "comment": "/tracker/donation/665779"
+  //   "utcUnixTimestamp": "1578809763",
+  //   "donationAmount": "10.00",
+  //   "comment": "/tracker/donation/664591"
   // }
-  var timeReceivedData = entries.map(function(entry) {
-    var date = new Date(entry.timeReceived);
-    date.setHours(date.getHours() - 4);
-    return date
+  var utcUnixTimestamp = entries.map(function(entry) {
+    return +entry.utcUnixTimestamp - 1578809763;
   });
 
   var chart1 = new Chart('chart1', {
     type: 'line',
     data: {
-      labels: timeReceivedData,
+      labels: utcUnixTimestamp,
       datasets: [
         {
           label: "Donation Amount",
-          data: entries.map(function(entry) { return +entry.amount; })
+          data: entries.map(function(entry) { return +entry.donationAmount; })
         }
       ]
     },
     options: {
-    scales: {
-      xAxes: [{
-        type: 'time',
-        time: {
-          unit: 'day'
-        }
-      }],
-      yAxes: [{
-        ticks: {
-          // Return an empty string to draw the tick line but hide the tick label
-          // Return `null` or `undefined` to hide the tick line entirely
-          userCallback: function(value, index, values) {
-            // Convert the number to a string and splite the string every 3 charaters from the end
-            value = value.toString();
-            value = value.split(/(?=(?:...)*$)/);
-            return '$' + value.join(',');
+      scales: {
+        xAxes: [{
+          ticks: {
+            userCallback: function(value, index, values) {
+              return sec2time(value);
+            }
           }
-        }
-      }]
+        }],
+        yAxes: [{
+          ticks: {
+            // Return an empty string to draw the tick line but hide the tick label
+            // Return `null` or `undefined` to hide the tick line entirely
+            userCallback: function(value, index, values) {
+              // Convert the number to a string and splite the string every 3 charaters from the end
+              value = value.toString();
+              value = value.split(/(?=(?:...)*$)/);
+              return '$' + value.join(',');
+            }
+          }
+        }]
+      }
     }
-  }
+  });
+  var chart2 = new Chart('chart2', {
+    type: 'line',
+    data: {
+      labels: utcUnixTimestamp,
+      datasets: [
+        {
+          label: "Cumulative Donation Amount",
+          data: entries.map(function(entry) { return +entry.donationAmount; }).map(cumulativeSum)
+        }
+      ]
+    },
+    options: {
+      scales: {
+        xAxes: [{
+          ticks: {
+            userCallback: function(value, index, values) {
+              return sec2time(value);
+            }
+          }
+        }],
+        yAxes: [{
+          ticks: {
+            // Return an empty string to draw the tick line but hide the tick label
+            // Return `null` or `undefined` to hide the tick line entirely
+            userCallback: function(value, index, values) {
+              // Convert the number to a string and splite the string every 3 charaters from the end
+              value = value.toString();
+              value = value.split(/(?=(?:...)*$)/);
+              return '$' + value.join(',');
+            }
+          }
+        }]
+      }
+    }
   });
 }
 
 // Request data using D3
-d3.csv("https://raw.githubusercontent.com/Pepper-Wood/gdqGraph/master/agdq2020_test.csv").then(makeCharts);
+d3.csv("https://raw.githubusercontent.com/Pepper-Wood/gdqGraph/master/agdq2020_test2.csv").then(makeCharts);
 </script>
 
 </html>
