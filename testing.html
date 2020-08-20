@@ -87,24 +87,27 @@ function makeCharts(entries) {
       datasets: [
         {
           label: "Donation Amount",
-          data: entries.map(function(entry) { return +entry.amount.replace("$", "").replace(",", ""); })
+          data: entries.map(function(entry) { return +entry.amount; })
         }
       ]
     },
     options: {
     scales: {
+      xAxes: [{
+        type: 'time',
+        time: {
+          unit: 'day'
+        }
+      }],
       yAxes: [{
-      ticks: {
+        ticks: {
           // Return an empty string to draw the tick line but hide the tick label
           // Return `null` or `undefined` to hide the tick line entirely
           userCallback: function(value, index, values) {
             // Convert the number to a string and splite the string every 3 charaters from the end
             value = value.toString();
             value = value.split(/(?=(?:...)*$)/);
-
-            // Convert the array to a string and format the output
-            value = value.join('.');
-            return '$' + value;
+            return '$' + value.join(',');
           }
         }
       }]
@@ -114,7 +117,7 @@ function makeCharts(entries) {
 }
 
 // Request data using D3
-d3.csv("https://raw.githubusercontent.com/Pepper-Wood/gdqGraph/master/agdq2020.csv").then(makeCharts);
+d3.csv("https://raw.githubusercontent.com/Pepper-Wood/gdqGraph/master/agdq2020_test.csv").then(makeCharts);
 </script>
 
 </html>
