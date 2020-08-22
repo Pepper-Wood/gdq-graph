@@ -1,0 +1,44 @@
+[
+    {
+        "gdq_run": "agdq2020",
+        "max_page": 1085,
+        "current_page": 1,
+        "status": "IN PROGRESS"
+    },
+    {
+        "gdq_run": "sgdq2019",
+        "max_page": 1021,
+        "current_page": 1,
+        "status": "IN PROGRESS"
+    },
+    {
+        "gdq_run": "agdq2019",
+        "max_page": 930,
+        "current_page": 1,
+        "status": "IN PROGRESS"
+    },
+    {
+        "gdq_run": "sgdq2018",
+        "max_page": 709,
+        "current_page": 1,
+        "status": "IN PROGRESS"
+    },
+    {
+        "gdq_run": "agdq2018",
+        "max_page": 892,
+        "current_page": 1,
+        "status": "IN PROGRESS"
+    },
+    {
+        "gdq_run": "sgdq2017",
+        "max_page": 603,
+        "current_page": 1,
+        "status": "IN PROGRESS"
+    },
+    {
+        "gdq_run": "agdq2017",
+        "max_page": 870,
+        "current_page": 1,
+        "status": "IN PROGRESS"
+    }
+]
