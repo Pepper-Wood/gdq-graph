@@ -92,9 +92,9 @@ def update_csv_data(gdq_run, page_num):
         columns = table_row.findAll('td')
         if len(columns) == 0:
             continue
-        utc_unixtimestamp = convert_gmt_time_to_utc_unixtimestamp(columns[1].text.replace("\n", ""))
+        utc_unixtimestamp = convert_gmt_time_to_utc_unixtimestamp(columns[1].text.replace("\n", "").replace(" ", ""))
         donation_id = get_donation_id(table_row)
-        donation_amount = convert_money_string_to_number(columns[2].text.replace("\n", ""))
+        donation_amount = convert_money_string_to_number(columns[2].text.replace("\n", "").replace(" ", ""))
 
         csv_rows.append(f"{utc_unixtimestamp},{donation_id},{donation_amount}")
     write_csv_rows_to_csv(gdq_run, csv_rows)
