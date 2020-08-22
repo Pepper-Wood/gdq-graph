@@ -29,3 +29,5 @@ jobs:
         git config --local user.name "GitHub Action"
         git commit -m "${{ steps.current-time.outputs.time }} | Data update"
     - run: git push
+    - name: archiver test
+      run: python3 new_archiver.py
