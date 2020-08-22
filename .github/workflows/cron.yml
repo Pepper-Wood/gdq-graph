@@ -21,7 +21,7 @@ jobs:
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Continue pulling SGDQ 2020 from live counters
-      run: python3 scripts/main.py
+      run: python3 scripts/get_sgdq2020_live_data.py
     - name: Pull archive data
       run: python3 scripts/get_archive_data.py
     - run: git add .
