@@ -51,7 +51,10 @@ def convert_gmt_time_to_utc_unixtimestamp(date_str):
     Returns:
         string: UTC unix timestamp, i.e. 1578882911
     """
-    date_time = datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%S.%f%z')
+    try:
+        date_time = datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%S.%f%z')
+    except ValueError:
+        date_time = datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%S%z')
     unixtime = int(time.mktime(date_time.timetuple()))
     return unixtime
 

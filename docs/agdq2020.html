@@ -1,0 +1,183 @@
+<html>
+<head>
+  <title>SGDQ 2020 Donation Tracker Graphs</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+  <style>
+  .hero.is-info {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000000;
+  }
+  .hero::before {
+    content: "";
+    background: url('images/sgdq2020banner.jpeg');
+    background-size: cover;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    opacity: 0.5;
+  }
+  </style>
+</head>
+<body>
+
+<section class="hero is-info">
+  <div class="hero-body">
+    <div class="container has-text-centered">
+      <h1 class="title">AGDQ 2020 Archived Donation Tracker Graphs</h1>
+    </div>
+  </div>
+  <div class="hero-foot">
+    <nav class="tabs is-boxed is-fullwidth is-large">
+      <div class="container">
+        <ul>
+          <li class="tab is-active" onclick="openTab(event,'chart1tab')"><a>Donation Amount</a></li>
+          <li class="tab" onclick="openTab(event,'chart2tab')"><a>Cumulative Donation Amount</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+</section>
+  
+<div class="container section">
+  <div id="chart1tab" class="content-tab"><div class="wrapper"><canvas id="chart1"></canvas></div></div>
+  <div id="chart2tab" class="content-tab" style="display:none"><div class="wrapper"><canvas id="chart2"></canvas></div></div>
+</div>
+
+</body>
+
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
+<script>
+// https://gist.github.com/vankasteelj/74ab7793133f4b257ea3
+function sec2time(timeInSeconds) {
+  var pad = function(num, size) { return ('000' + num).slice(size * -1); },
+  time = parseFloat(timeInSeconds).toFixed(3),
+  hours = Math.floor(time / 60 / 60),
+  minutes = Math.floor(time / 60) % 60,
+  seconds = Math.floor(time - minutes * 60);
+
+  return pad(hours, 2) + ':' + pad(minutes, 2) + ':' + pad(seconds, 2);
+}
+
+function openTab(evt, tabName) {
+  var i, x, tablinks;
+  x = document.getElementsByClassName("content-tab");
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tab");
+  for (i = 0; i < x.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" is-active", "");
+  }
+  document.getElementById(tabName).style.display = "block";
+  evt.currentTarget.className += " is-active";
+}
+
+const cumulativeSum = (sum => value => sum += value)(0);
+
+function sort_by_timestamp(entry_a, entry_b) {
+  if (entry_a.utc_unixtimestamp < entry_b.utc_unixtimestamp) {
+    return -1;
+  } else if (entry_a.utc_unixtimestamp > entry_b.utc_unixtimestamp) {
+    return 1;
+  }
+  if (entry_a.donation_id < entry_b.donation_id) {
+    return -1;
+  }
+  return 1;
+}
+
+function makeCharts(entries) {
+  // entries is an array of objects where each object is something like:
+  // {
+  //   "utc_unixtimestamp": "1578809763",
+  //   "donation_id": "664591"
+  //   "donation_amount": "10.00",
+  // }
+  entries.sort(sort_by_timestamp);
+  var utc_unixtimestamp = entries.map(function(entry) {
+    return +entry.utc_unixtimestamp - 1578241800;
+  });
+
+  var chart1 = new Chart('chart1', {
+    type: 'line',
+    data: {
+      labels: utc_unixtimestamp,
+      datasets: [
+        {
+          label: "Donation Amount",
+          data: entries.map(function(entry) { return +entry.donation_amount; })
+        }
+      ]
+    },
+    options: {
+      scales: {
+        xAxes: [{
+          ticks: {
+            userCallback: function(value, index, values) {
+              return sec2time(value);
+            }
+          }
+        }],
+        yAxes: [{
+          ticks: {
+            // Return an empty string to draw the tick line but hide the tick label
+            // Return `null` or `undefined` to hide the tick line entirely
+            userCallback: function(value, index, values) {
+              // Convert the number to a string and splite the string every 3 charaters from the end
+              value = value.toString();
+              value = value.split(/(?=(?:...)*$)/);
+              return '$' + value.join(',');
+            }
+          }
+        }]
+      }
+    }
+  });
+  var chart2 = new Chart('chart2', {
+    type: 'line',
+    data: {
+      labels: utc_unixtimestamp,
+      datasets: [
+        {
+          label: "Cumulative Donation Amount",
+          data: entries.map(function(entry) { return +entry.donation_amount; }).map(cumulativeSum)
+        }
+      ]
+    },
+    options: {
+      scales: {
+        xAxes: [{
+          ticks: {
+            userCallback: function(value, index, values) {
+              return sec2time(value);
+            }
+          }
+        }],
+        yAxes: [{
+          ticks: {
+            // Return an empty string to draw the tick line but hide the tick label
+            // Return `null` or `undefined` to hide the tick line entirely
+            userCallback: function(value, index, values) {
+              // Convert the number to a string and splite the string every 3 charaters from the end
+              value = value.toString();
+              value = value.split(/(?=(?:...)*$)/);
+              return '$' + value.join(',');
+            }
+          }
+        }]
+      }
+    }
+  });
+}
+
+// Request data using D3
+d3.csv("https://raw.githubusercontent.com/Pepper-Wood/gdq-graph/master/data/agdq2020.csv").then(makeCharts);
+</script>
+
+</html>
