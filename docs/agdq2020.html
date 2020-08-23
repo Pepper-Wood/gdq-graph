@@ -31,22 +31,9 @@
       <h1 class="title">AGDQ 2020 Archived Donation Tracker Graphs</h1>
     </div>
   </div>
-  <div class="hero-foot">
-    <nav class="tabs is-boxed is-fullwidth is-large">
-      <div class="container">
-        <ul>
-          <li class="tab is-active" onclick="openTab(event,'chart1tab')"><a>Donation Amount</a></li>
-          <li class="tab" onclick="openTab(event,'chart2tab')"><a>Cumulative Donation Amount</a></li>
-        </ul>
-      </div>
-    </nav>
-  </div>
 </section>
-  
-<div class="container section">
-  <div id="chart1tab" class="content-tab"><div class="wrapper"><canvas id="chart1"></canvas></div></div>
-  <div id="chart2tab" class="content-tab" style="display:none"><div class="wrapper"><canvas id="chart2"></canvas></div></div>
-</div>
+
+<div id="agdq2020tab"><div class="wrapper"><canvas id="agdq2020chart"></canvas></div></div>
 
 </body>
 
@@ -62,20 +49,6 @@ function sec2time(timeInSeconds) {
   seconds = Math.floor(time - minutes * 60);
 
   return pad(hours, 2) + ':' + pad(minutes, 2) + ':' + pad(seconds, 2);
-}
-
-function openTab(evt, tabName) {
-  var i, x, tablinks;
-  x = document.getElementsByClassName("content-tab");
-  for (i = 0; i < x.length; i++) {
-    x[i].style.display = "none";
-  }
-  tablinks = document.getElementsByClassName("tab");
-  for (i = 0; i < x.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" is-active", "");
-  }
-  document.getElementById(tabName).style.display = "block";
-  evt.currentTarget.className += " is-active";
 }
 
 const cumulativeSum = (sum => value => sum += value)(0);
@@ -104,53 +77,23 @@ function makeCharts(entries) {
     return +entry.utc_unixtimestamp - 1578241800;
   });
 
-  var chart1 = new Chart('chart1', {
-    type: 'line',
-    data: {
-      labels: utc_unixtimestamp,
-      datasets: [
-        {
-          label: "Donation Amount",
-          data: entries.map(function(entry) { return +entry.donation_amount; })
-        }
-      ]
-    },
-    options: {
-      scales: {
-        xAxes: [{
-          ticks: {
-            userCallback: function(value, index, values) {
-              return sec2time(value);
-            }
-          }
-        }],
-        yAxes: [{
-          ticks: {
-            // Return an empty string to draw the tick line but hide the tick label
-            // Return `null` or `undefined` to hide the tick line entirely
-            userCallback: function(value, index, values) {
-              // Convert the number to a string and splite the string every 3 charaters from the end
-              value = value.toString();
-              value = value.split(/(?=(?:...)*$)/);
-              return '$' + value.join(',');
-            }
-          }
-        }]
-      }
-    }
-  });
-  var chart2 = new Chart('chart2', {
+  var agdq2020chart = new Chart('agdq2020chart', {
     type: 'line',
     data: {
       labels: utc_unixtimestamp,
       datasets: [
         {
           label: "Cumulative Donation Amount",
-          data: entries.map(function(entry) { return +entry.donation_amount; }).map(cumulativeSum)
+          data: entries.map(function(entry) { return +entry.donation_amount; }).map(cumulativeSum),
+          showLine: false
         }
       ]
     },
     options: {
+      animation: { duration: 0 },
+      hover: { animationDuration: 0 },
+      responsiveAnimationDuration: 0,
+      showLines: false,
       scales: {
         xAxes: [{
           ticks: {
