@@ -24,6 +24,8 @@ jobs:
       run: python3 scripts/get_sgdq2020_live_data.py
     - name: Pull archive data
       run: python3 scripts/get_archive_data.py
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
     - run: git add .
     - run: git status
     - run: |

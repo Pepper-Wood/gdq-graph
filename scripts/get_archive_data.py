@@ -7,9 +7,11 @@ the data to a CSV found in the data/ folder."""
 from datetime import datetime
 import json
 import time
-from os import path
+from os import environ, path
 import requests
 from bs4 import BeautifulSoup
+from discord_webhook import DiscordWebhook
+import sys
 
 def fetch_soup(url):
     """Return soup from url. Useful if multiple calls are needed so that a sleep can be added.
@@ -155,7 +157,15 @@ def initialize_csv(gdq_run):
         file.close()
 
 if __name__ == "__main__":
-    GDQ_RUN, PAGE_NUM = get_current_query()
-    if GDQ_RUN != "DONE":
-        initialize_csv(GDQ_RUN)
-        update_csv_data(GDQ_RUN, PAGE_NUM)
+    try:
+        GDQ_RUN, PAGE_NUM = get_current_query()
+        if GDQ_RUN != "DONE":
+            initialize_csv(GDQ_RUN)
+            update_csv_data(GDQ_RUN, PAGE_NUM)
+    except:
+        discord_webhook_url = environ.get("DISCORD_WEBHOOK")
+        webhook = DiscordWebhook(
+            url=discord_webhook_url,
+            content=f"@here ERROR: {sys.exc_info()[0]}\n{sys.exc_info()[1]}"
+        )
+        response = webhook.execute()
