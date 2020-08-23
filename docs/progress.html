@@ -55,7 +55,7 @@ function get_status_class(curr, max) {
 }
 
 function get_time_remaining(curr, max) {
-  let total_minutes = (max - curr + 1) * 5;
+  let total_minutes = Math.ceil((max - curr + 1) * 2.5);
   let days = Math.floor(total_minutes / (60*24));
   let remainder_minutes = total_minutes - (days * (60 * 24));
   let hours = Math.floor(remainder_minutes / 60);
