@@ -1,0 +1,127 @@
+<html>
+<head>
+  <title>SGDQ 2020 Donation Tracker Graphs</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+  <style>
+  .hero.is-info {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000000;
+  }
+  .hero::before {
+    content: "";
+    background: url('images/sgdq2020banner.jpeg');
+    background-size: cover;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    opacity: 0.5;
+  }
+  </style>
+</head>
+<body>
+
+<section class="hero is-info">
+  <div class="hero-body">
+    <div class="container has-text-centered">
+      <h1 class="title">SGDQ 2019 Archived Donation Tracker Graphs</h1>
+    </div>
+  </div>
+</section>
+
+<div id="sgdq2019tab"><div class="wrapper"><canvas id="sgdq2019chart"></canvas></div></div>
+
+</body>
+
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
+<script>
+// https://gist.github.com/vankasteelj/74ab7793133f4b257ea3
+function sec2time(timeInSeconds) {
+  let pad = function(num, size) { return ('000' + num).slice(size * -1); };
+  let time = parseFloat(timeInSeconds).toFixed(3);
+  let days = Math.floor(time / 60 / 60 / 24);
+  time = time - (days * 60 * 60 * 24);
+  let hours = Math.floor(time / 60 / 60);
+  let minutes = Math.floor(time / 60) % 60;
+  let seconds = Math.floor(time - minutes * 60);
+  return `Day ${pad(days, 1)} ${pad(hours, 2)}:${pad(minutes, 2)}:${pad(seconds, 2)}`;
+}
+
+const cumulativeSum = (sum => value => sum += value)(0);
+
+function sort_by_timestamp(entry_a, entry_b) {
+  if (entry_a.utc_unixtimestamp < entry_b.utc_unixtimestamp) {
+    return -1;
+  } else if (entry_a.utc_unixtimestamp > entry_b.utc_unixtimestamp) {
+    return 1;
+  }
+  if (entry_a.donation_id < entry_b.donation_id) {
+    return -1;
+  }
+  return 1;
+}
+
+function makeCharts(entries) {
+  // entries is an array of objects where each object is something like:
+  // {
+  //   "utc_unixtimestamp": "1578809763",
+  //   "donation_id": "664591"
+  //   "donation_amount": "10.00",
+  // }
+  entries.sort(sort_by_timestamp);
+  var utc_unixtimestamp = entries.map(function(entry) {
+    return +entry.utc_unixtimestamp - 1561307400;
+  });
+
+  var sgdq2019chart = new Chart('sgdq2019chart', {
+    type: 'line',
+    data: {
+      labels: utc_unixtimestamp,
+      datasets: [
+        {
+          label: "Cumulative Donation Amount",
+          data: entries.map(function(entry) { return +entry.donation_amount; }).map(cumulativeSum),
+          showLine: false
+        }
+      ]
+    },
+    options: {
+      animation: { duration: 0 },
+      hover: { animationDuration: 0 },
+      responsiveAnimationDuration: 0,
+      showLines: false,
+      scales: {
+        xAxes: [{
+          ticks: {
+            userCallback: function(value, index, values) {
+              return sec2time(value);
+            }
+          }
+        }],
+        yAxes: [{
+          ticks: {
+            // Return an empty string to draw the tick line but hide the tick label
+            // Return `null` or `undefined` to hide the tick line entirely
+            userCallback: function(value, index, values) {
+              // Convert the number to a string and splite the string every 3 charaters from the end
+              value = value.toString();
+              value = value.split(/(?=(?:...)*$)/);
+              return '$' + value.join(',');
+            }
+          }
+        }]
+      }
+    }
+  });
+}
+
+// Request data using D3
+d3.csv("https://raw.githubusercontent.com/Pepper-Wood/gdq-graph/master/data/sgdq2019.csv").then(makeCharts);
+</script>
+
+</html>

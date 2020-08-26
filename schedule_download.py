@@ -32,7 +32,7 @@ def convert_schedule_gmt_time_to_utc_unixtimestamp(date_str):
     return unixtime
 
 def get_schedule_csv():
-    soup = fetch_soup(f"https://gamesdonequick.com/tracker/runs/agdq2020")
+    soup = fetch_soup(f"https://gamesdonequick.com/tracker/runs/sgdq2019")
     csv_rows = []
     table = soup.find("table")
     for table_row in table.findAll('tr'):
@@ -50,3 +50,4 @@ def get_schedule_csv():
 if __name__ == "__main__":
     # get_schedule_csv()
     print(convert_schedule_gmt_time_to_utc_unixtimestamp("2020-01-05T11:30:00-05:00"))
+    print(convert_schedule_gmt_time_to_utc_unixtimestamp("2019-06-23T12:30:00-04:00"))
