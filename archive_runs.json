@@ -3,12 +3,12 @@
         "gdq_run": "agdq2020",
         "max_page": 1085,
         "current_page": 1085,
-        "status": "IN PROGRESS"
+        "status": "DONE"
     },
     {
         "gdq_run": "sgdq2019",
         "max_page": 1021,
-        "current_page": 1,
+        "current_page": 2,
         "status": "IN PROGRESS"
     },
     {
