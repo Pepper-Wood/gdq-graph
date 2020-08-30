@@ -30,6 +30,8 @@ jobs:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
     - run: git add .
     - run: git status
+    - run: git pull
+    - run: git status
     - run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
