@@ -41,10 +41,11 @@
     <div class="navbar-start">
       <a class="navbar-item" href="https://www.kathryndipippo.com/gdq-graph/">SGDQ 2020 Live Data</a>
       <a class="navbar-item" href="https://www.kathryndipippo.com/gdq-graph/progress.html">Archive Download Progress</a>
+      <a class="navbar-item" href="https://www.kathryndipippo.com/gdq-graph/reduce.html">GDQ Event Comparison</a>
       <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link">Archive Data</a>
         <div class="navbar-dropdown is-boxed">
-          <a class="navbar-item" is-active href="https://www.kathryndipippo.com/gdq-graph/agdq2020.html">AGDQ 2020</a>
+          <a class="navbar-item is-active" href="https://www.kathryndipippo.com/gdq-graph/agdq2020.html">AGDQ 2020</a>
           <a class="navbar-item" href="https://www.kathryndipippo.com/gdq-graph/sgdq2019.html">SGDQ 2019</a>
         </div>
       </div>
@@ -101,8 +102,9 @@ function makeCharts(entries) {
   //   "donation_amount": "10.00",
   // }
   entries.sort(sort_by_timestamp);
+
   var utc_unixtimestamp = entries.map(function(entry) {
-    return +entry.utc_unixtimestamp - 1578241800;
+    return +entry.utc_unixtimestamp - 1578223800;
   });
 
   var agdq2020chart = new Chart('agdq2020chart', {

@@ -41,6 +41,7 @@
     <div class="navbar-start">
       <a class="navbar-item" href="https://www.kathryndipippo.com/gdq-graph/">SGDQ 2020 Live Data</a>
       <a class="navbar-item" href="https://www.kathryndipippo.com/gdq-graph/progress.html">Archive Download Progress</a>
+      <a class="navbar-item" href="https://www.kathryndipippo.com/gdq-graph/reduce.html">GDQ Event Comparison</a>
       <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link">Archive Data</a>
         <div class="navbar-dropdown is-boxed">
@@ -102,7 +103,7 @@ function makeCharts(entries) {
   // }
   entries.sort(sort_by_timestamp);
   var utc_unixtimestamp = entries.map(function(entry) {
-    return +entry.utc_unixtimestamp - 1561307400;
+    return +entry.utc_unixtimestamp - 1561293000;
   });
 
   var sgdq2019chart = new Chart('sgdq2019chart', {
