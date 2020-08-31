@@ -26,14 +26,12 @@ def get_data_at_interval(event, hours):
 if __name__ == "__main__":
     agdq2020 = readfileintowords("data-sorted/agdq2020_result.csv")
     sgdq2019 = readfileintowords("data-sorted/sgdq2019_result.csv")
+    agdq2019 = readfileintowords("data-sorted/agdq2019_result.csv")
 
     time = get_time_at_interval(3)
     agdq2020data = get_data_at_interval(agdq2020, 3)
     sgdq2019data = get_data_at_interval(sgdq2019, 3)
-
-    print(len(time))
-    print(len(agdq2020data))
-    print(len(sgdq2019data))
+    agdq2019data = get_data_at_interval(agdq2019, 3)
 
     f = open("reduced_data.txt", "w")
     f.write("['" + "','".join(time) + "']")
@@ -41,4 +39,6 @@ if __name__ == "__main__":
     f.write("['" + "','".join(agdq2020data) + "']")
     f.write("\n\n\n")
     f.write("['" + "','".join(sgdq2019data) + "']")
+    f.write("\n\n\n")
+    f.write("[" + ",".join(agdq2019data) + "]")
     f.close()

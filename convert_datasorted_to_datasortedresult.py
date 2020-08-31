@@ -11,11 +11,12 @@ if __name__ == "__main__":
     # STEP 1: FIND THE TIMESTAMP USING THIS WEBSITE: https://www.unixtimestamp.com/index.php
     event_info = {
         "agdq2020": 1578223800,
-        "sgdq2019": 1561293000
+        "sgdq2019": 1561293000,
+        "agdq2019": 1546774200
     }
 
     # STEP 2: CHANGE WHAT EVENT THIS IS POINTING TO
-    EVENT = "sgdq2019"
+    EVENT = "agdq2019"
     TIME_START = event_info[EVENT]
 
     data = readfileintowords(f"data-sorted/{EVENT}.csv")
