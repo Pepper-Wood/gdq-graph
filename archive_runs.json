@@ -21,12 +21,12 @@
         "gdq_run": "sgdq2020",
         "max_page": 675,
         "current_page": 675,
-        "status": "IN PROGRESS"
+        "status": "DONE"
     },
     {
         "gdq_run": "sgdq2018",
         "max_page": 709,
-        "current_page": 1,
+        "current_page": 2,
         "status": "IN PROGRESS"
     },
     {
