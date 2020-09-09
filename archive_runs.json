@@ -46,5 +46,77 @@
         "max_page": 870,
         "current_page": 162,
         "status": "IN PROGRESS"
+    },
+    {
+        "gdq_run": "sgdq2016",
+        "max_page": 618,
+        "current_page": 0,
+        "status": "IN PROGRESS"
+    },
+    {
+        "gdq_run": "agdq2016",
+        "max_page": 613,
+        "current_page": 0,
+        "status": "IN PROGRESS"
+    },
+    {
+        "gdq_run": "sgdq2015",
+        "max_page": 571,
+        "current_page": 0,
+        "status": "IN PROGRESS"
+    },
+    {
+        "gdq_run": "agdq2015",
+        "max_page": 791,
+        "current_page": 0,
+        "status": "IN PROGRESS"
+    },
+    {
+        "gdq_run": "sgdq2014",
+        "max_page": 383,
+        "current_page": 0,
+        "status": "IN PROGRESS"
+    },
+    {
+        "gdq_run": "agdq2014",
+        "max_page": 563,
+        "current_page": 0,
+        "status": "IN PROGRESS"
+    },
+    {
+        "gdq_run": "sgdq2013",
+        "max_page": 216,
+        "current_page": 0,
+        "status": "IN PROGRESS"
+    },
+    {
+        "gdq_run": "agdq2013",
+        "max_page": 327,
+        "current_page": 0,
+        "status": "IN PROGRESS"
+    },
+    {
+        "gdq_run": "sgdq2012",
+        "max_page": 45,
+        "current_page": 0,
+        "status": "IN PROGRESS"
+    },
+    {
+        "gdq_run": "agdq2012",
+        "max_page": 118,
+        "current_page": 0,
+        "status": "IN PROGRESS"
+    },
+    {
+        "gdq_run": "sgdq2011",
+        "max_page": 23,
+        "current_page": 0,
+        "status": "IN PROGRESS"
+    },
+    {
+        "gdq_run": "agdq2011",
+        "max_page": 66,
+        "current_page": 0,
+        "status": "IN PROGRESS"
     }
 ]
