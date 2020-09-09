@@ -24,21 +24,23 @@ def get_data_at_interval(event, hours):
     return event_data
 
 if __name__ == "__main__":
-    agdq2020 = readfileintowords("data-sorted/agdq2020_result.csv")
-    sgdq2019 = readfileintowords("data-sorted/sgdq2019_result.csv")
-    agdq2019 = readfileintowords("data-sorted/agdq2019_result.csv")
-
-    time = get_time_at_interval(3)
-    agdq2020data = get_data_at_interval(agdq2020, 3)
-    sgdq2019data = get_data_at_interval(sgdq2019, 3)
-    agdq2019data = get_data_at_interval(agdq2019, 3)
+    # STEP 1: Update the list with the new events to add to the graph
+    events = [
+        "agdq2018",
+        "sgdq2017",
+        "sgdq2018",
+        "sgdq2020"
+    ]
 
     f = open("reduced_data.txt", "w")
-    f.write("['" + "','".join(time) + "']")
-    f.write("\n\n\n")
-    f.write("['" + "','".join(agdq2020data) + "']")
-    f.write("\n\n\n")
-    f.write("['" + "','".join(sgdq2019data) + "']")
-    f.write("\n\n\n")
-    f.write("[" + ",".join(agdq2019data) + "]")
+    time = get_time_at_interval(3)
+    f.write("['" + "','".join(time) + "']\n\n\n")
+    for event in events:
+        event_result = readfileintowords(f"data-sorted/{event}_result.csv")
+        event_result_data = get_data_at_interval(event_result, 3)
+        f.write("['" + "','".join(event_result_data) + "']\n\n\n")
     f.close()
+
+    # STEP 2: Update reduce.js with the new datasets results.
+    # Color hexes are starting from the last row of the "Bright Color Palettes" image:
+    # https://wondernote.org/color-palettes-for-web-digital-blog-graphic-design-with-hexadecimal-codes/
