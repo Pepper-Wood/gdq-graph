@@ -45,12 +45,12 @@
         "gdq_run": "agdq2017",
         "max_page": 870,
         "current_page": 870,
-        "status": "IN PROGRESS"
+        "status": "DONE"
     },
     {
         "gdq_run": "sgdq2016",
         "max_page": 618,
-        "current_page": 0,
+        "current_page": 1,
         "status": "IN PROGRESS"
     },
     {
