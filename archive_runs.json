@@ -81,12 +81,12 @@
         "gdq_run": "agdq2014",
         "max_page": 563,
         "current_page": 563,
-        "status": "IN PROGRESS"
+        "status": "DONE"
     },
     {
         "gdq_run": "sgdq2013",
         "max_page": 216,
-        "current_page": 0,
+        "current_page": 1,
         "status": "IN PROGRESS"
     },
     {
